@@ -143,14 +143,18 @@ export default function EnrollPage() {
             </div>
 
             <div className="space-y-3">
-              <Button className="w-full" onClick={() => window.location.href = 'https://wa.me/1234567890'}>
-                💬 Chat on WhatsApp
-              </Button>
-              <Link href="/">
-                <Button variant="secondary" className="w-full">
-                  ← Back to Home
-                </Button>
-              </Link>
+             <Button
+  className="w-full"
+  onClick={() => window.location.href = 'https://wa.me/1234567890'}
+>
+  💬 Chat on WhatsApp
+</Button>
+
+<Link href="/" className="block mt-4">
+  <Button variant="secondary" className="w-full">
+    ← Back to Home
+  </Button>
+</Link>
             </div>
           </Card>
         </motion.div>
@@ -400,7 +404,7 @@ export default function EnrollPage() {
                     )}
                   </div>
 
-                  <div>
+                  {/* <div>
                     <label className="block text-sm font-medium text-ink mb-2">
                       Preferred Batch <span className="text-ink-muted text-xs">(Optional)</span>
                     </label>
@@ -412,7 +416,7 @@ export default function EnrollPage() {
                       className="w-full px-4 py-3 rounded-xl border-2 border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
                       placeholder="e.g., Weekday Mornings, Weekend Evenings"
                     />
-                  </div>
+                  </div> */}
 
                   <div>
                     <label className="block text-sm font-medium text-ink mb-2">
