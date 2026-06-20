@@ -3,39 +3,39 @@
 import { motion } from 'framer-motion'
 import BlobIcon from '../ui/BlobIcon'
 import Badge from '../ui/Badge'
-import { Award, Users, BarChart3, Shield, Clock, DollarSign } from 'lucide-react'
+import { Award, Users, BarChart3, Shield, Clock, DollarSign, GlobeCheck } from 'lucide-react'
 
 export default function WhyChooseUs() {
   const features = [
     {
       icon: Award,
-      title: 'Certified Teachers',
-      description: 'Experienced educators with early childhood qualifications',
+      title: 'Experienced Educators',
+      description: 'Experienced educators with early childhood teaching methods.',
     },
     {
       icon: Users,
       title: 'Small Batch Sizes',
-      description: 'Maximum 8 students per class for personalized attention',
+      description: 'Maximum 5-8 students per session for personalized attention.',
     },
     {
       icon: BarChart3,
       title: 'Progress Reports',
-      description: 'Weekly updates on your childs learning journey',
+      description: 'Weekly updates on your childs learning journey.',
     },
     {
       icon: Shield,
       title: 'Safe & Moderated',
-      description: 'Secure platform with verified teachers and monitoring',
+      description: 'Secure platform with learner-friendly environment and parent inclusive working.',
     },
     {
       icon: Clock,
-      title: 'Flexible Scheduling',
-      description: 'Choose weekday or weekend batches that suit you',
+      title: 'Adequate Class Turns',
+      description: 'Sessions to be held thrice a week to keep the learning - retaining balance.',
     },
     {
-      icon: DollarSign,
-      title: 'Money-Back Trial',
-      description: 'Not satisfied? Get a full refund after the first class',
+      icon: GlobeCheck,
+      title: 'American English',
+      description: 'Learning that is  inclusive of understanding pace of learner while abiding to AMERICAN ENGLISH. ',
     },
   ]
 
@@ -53,7 +53,7 @@ export default function WhyChooseUs() {
             Learning You Can Trust
           </h2>
           <p className="text-lg text-ink-muted max-w-2xl mx-auto">
-            We understand what parents look for in their child's education
+            We understand what parents look for in their child's oration
           </p>
         </motion.div>
 

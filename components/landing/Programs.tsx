@@ -4,33 +4,33 @@ import { motion } from 'framer-motion'
 import Card from '../ui/Card'
 import BlobIcon from '../ui/BlobIcon'
 import Badge from '../ui/Badge'
-import { BookOpen, Calculator, Palette, Microscope } from 'lucide-react'
+import { BookOpen, Calculator, Palette, Microscope, Languages, NotebookPen, LetterTextIcon, Crown } from 'lucide-react'
 
 export default function Programs() {
   const programs = [
     {
-      icon: BookOpen,
+      icon: LetterTextIcon,
       title: 'Phonics & Reading',
       description: 'Build strong reading foundations with phonics-based learning',
       ageRange: '5-8 years',
       variant: 'primary' as const,
     },
     {
-      icon: Calculator,
+      icon: BookOpen,
       title: 'Grammar',
       description: 'English Grammar made easy through fun activities, and adequate learning resources.',
       ageRange: '5-8 years',
       variant: 'secondary' as const,
     },
     {
-      icon: Palette,
+      icon: NotebookPen,
       title: 'Creative Writing',
       description: 'Express through the structure of writing and storytelling',
       ageRange: '5-8 years',
       variant: 'accent' as const,
     },
     {
-      icon: Microscope,
+      icon: Crown,
       title: 'Confidence',
       description: 'Explore and discover to become GLOBALLY READY',
       ageRange: '5-8 years',
