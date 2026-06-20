@@ -13,11 +13,11 @@ export default function Footer() {
                 <span className="text-white font-bold text-xl">L</span>
               </div>
               <span className="font-display font-bold text-lg text-ink">
-                LittleLearners
+                La English Atelier
               </span>
             </div>
             <p className="text-sm text-ink-muted">
-              Where curious minds begin their greatest adventure
+              Making Learners Globally Ready
             </p>
           </div>
 
@@ -38,19 +38,15 @@ export default function Footer() {
             <ul className="space-y-3 text-sm text-ink-muted">
               <li className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-primary" />
-                <a href="tel:+1234567890" className="hover:text-primary transition-colors">
-                  +1 (234) 567-890
+                <a href="tel:+91 9335044403" className="hover:text-primary transition-colors">
+                  +91 9335044403
                 </a>
               </li>
               <li className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-primary" />
-                <a href="mailto:hello@littlelearners.com" className="hover:text-primary transition-colors">
-                  hello@littlelearners.com
+                <a href="mailto:laenglishatelier@gmail.com" className="hover:text-primary transition-colors">
+                  laenglishatelier@gmail.com
                 </a>
-              </li>
-              <li className="flex items-start gap-2">
-                <MapPin className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
-                <span>123 Learning Street, Education City, EC 12345</span>
               </li>
             </ul>
           </div>
