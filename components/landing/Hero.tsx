@@ -136,10 +136,10 @@ export default function Hero() {
               <div className="text-sm">
                 <div className="flex items-center gap-1 text-ink font-semibold">
                   <Star className="w-4 h-4 fill-accent text-accent" />
-                  <span>4.9</span>
+                  <span>4.8</span>
                 </div>
                 <div className="text-ink-muted">
-                  Loved by 2,000+ parents
+                  Loved by 1,016+ parents
                 </div>
               </div>
             </motion.div>

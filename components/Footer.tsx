@@ -13,11 +13,11 @@ export default function Footer() {
                 <span className="text-white font-bold text-xl">L</span>
               </div>
               <span className="font-display font-bold text-lg text-ink">
-                LittleLearners
+                La English Atelier
               </span>
             </div>
             <p className="text-sm text-ink-muted">
-              Where curious minds begin their greatest adventure
+              Making Learners Globally Ready
             </p>
           </div>
 
@@ -38,19 +38,15 @@ export default function Footer() {
             <ul className="space-y-3 text-sm text-ink-muted">
               <li className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-primary" />
-                <a href="tel:+1234567890" className="hover:text-primary transition-colors">
-                  +1 (234) 567-890
+                <a href="tel:+91 9335044403" className="hover:text-primary transition-colors">
+                  +91 9335044403
                 </a>
               </li>
               <li className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-primary" />
-                <a href="mailto:hello@littlelearners.com" className="hover:text-primary transition-colors">
-                  hello@littlelearners.com
+                <a href="mailto:laenglishatelier@gmail.com" className="hover:text-primary transition-colors">
+                  laenglishatelier@gmail.com
                 </a>
-              </li>
-              <li className="flex items-start gap-2">
-                <MapPin className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
-                <span>123 Learning Street, Education City, EC 12345</span>
               </li>
             </ul>
           </div>
@@ -59,13 +55,13 @@ export default function Footer() {
           <div>
             <h3 className="font-display font-semibold text-ink mb-4">Follow Us</h3>
             <div className="flex gap-3">
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-colors">
+              <a href="https://www.facebook.com/share/1FuHf4ganM/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-colors">
                 <Share2 className="w-5 h-5" />
               </a>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-colors">
+              <a href="https://www.instagram.com/laenglishatelier?igsh=N3hmM2RtYmhsN2tx" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-colors">
                 <MessageCircle className="w-5 h-5" />
               </a>
-              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-colors">
+              <a href="https://www.linkedin.com/in/rashida-zaidi-27184761?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-colors">
                 <Send className="w-5 h-5" />
               </a>
             </div>
@@ -73,7 +69,7 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-border mt-12 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-ink-muted">
-          <p>© 2024 LittleLearners Academy. All rights reserved.</p>
+          <p>© 2026 La English Atelier. All rights reserved.</p>
           <div className="flex gap-6">
             <a href="#" className="hover:text-primary transition-colors">Privacy Policy</a>
             <a href="#" className="hover:text-primary transition-colors">Terms of Service</a>
