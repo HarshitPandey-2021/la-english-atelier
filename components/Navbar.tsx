@@ -2,13 +2,23 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import Button from './ui/Button'
 import { cn } from '@/lib/utils'
 import { Menu, X, ShieldCheck } from 'lucide-react'
 
+const navLinks = [
+  { href: '/about', label: 'About Us', isRoute: true },
+  { href: '/#programs', label: 'Programs', isRoute: false },
+  { href: '/#why-us', label: 'Why Us', isRoute: false },
+  { href: '/#outcomes', label: 'Outcomes', isRoute: false },
+  { href: '/#contact', label: 'Contact', isRoute: false },
+]
+
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const pathname = usePathname()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,8 +32,8 @@ export default function Navbar() {
     <nav
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
-        scrolled 
-          ? 'bg-white/95 backdrop-blur-md shadow-md' 
+        scrolled
+          ? 'bg-white/95 backdrop-blur-md shadow-md'
           : 'bg-white/50 backdrop-blur-sm'
       )}
     >
@@ -41,21 +51,24 @@ export default function Navbar() {
 
           {/* Desktop Nav Links */}
           <div className="hidden md:flex items-center space-x-8">
-            <a href="#programs" className="text-ink-muted hover:text-primary transition-colors font-medium">
-              Programs
-            </a>
-            <a href="#why-us" className="text-ink-muted hover:text-primary transition-colors font-medium">
-              Why Us
-            </a>
-            <a href="#outcomes" className="text-ink-muted hover:text-primary transition-colors font-medium">
-              Outcomes
-            </a>
-            <a href="#contact" className="text-ink-muted hover:text-primary transition-colors font-medium">
-              Contact
-            </a>
-            {/* Admin Link - Discreet */}
-            <Link 
-              href="/login" 
+            {navLinks.map((link) => {
+              const isActive = link.isRoute && pathname === link.href
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={cn(
+                    'transition-colors font-medium',
+                    isActive ? 'text-primary' : 'text-ink-muted hover:text-primary'
+                  )}
+                >
+                  {link.label}
+                </Link>
+              )
+            })}
+
+            <Link
+              href="/login"
               className="text-ink-muted/60 hover:text-primary transition-colors flex items-center gap-1 text-sm"
               title="Admin Login"
             >
@@ -70,7 +83,6 @@ export default function Navbar() {
               <Button size="md">Enroll Now</Button>
             </Link>
 
-            {/* Mobile menu button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="md:hidden p-2 text-ink hover:text-primary transition-colors"
@@ -83,19 +95,30 @@ export default function Navbar() {
         {/* Mobile Menu */}
         {mobileMenuOpen && (
           <div className="md:hidden py-4 space-y-3 border-t border-border">
-            <a href="#programs" className="block px-4 py-2 text-ink-muted hover:text-primary hover:bg-primary-tint rounded-lg transition-colors">
-              Programs
-            </a>
-            <a href="#why-us" className="block px-4 py-2 text-ink-muted hover:text-primary hover:bg-primary-tint rounded-lg transition-colors">
-              Why Us
-            </a>
-            <a href="#outcomes" className="block px-4 py-2 text-ink-muted hover:text-primary hover:bg-primary-tint rounded-lg transition-colors">
-              Outcomes
-            </a>
-            <a href="#contact" className="block px-4 py-2 text-ink-muted hover:text-primary hover:bg-primary-tint rounded-lg transition-colors">
-              Contact
-            </a>
-            <Link href="/login" className="block px-4 py-2 text-ink-muted hover:text-primary hover:bg-primary-tint rounded-lg transition-colors">
+            {navLinks.map((link) => {
+              const isActive = link.isRoute && pathname === link.href
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={cn(
+                    'block px-4 py-2 rounded-lg transition-colors',
+                    isActive
+                      ? 'text-primary bg-primary-tint'
+                      : 'text-ink-muted hover:text-primary hover:bg-primary-tint'
+                  )}
+                >
+                  {link.label}
+                </Link>
+              )
+            })}
+
+            <Link
+              href="/login"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-4 py-2 text-ink-muted hover:text-primary hover:bg-primary-tint rounded-lg transition-colors"
+            >
               Admin Login
             </Link>
             <div className="px-4 pt-2">

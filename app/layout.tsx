@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
 import { fredoka, jakarta } from '@/lib/fonts'
+import Navbar from '@/components/Navbar'
+import Footer from '@/components/Footer'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -13,14 +15,16 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html 
-      lang="en" 
-      className={`${fredoka.variable} ${jakarta.variable}`} 
+    <html
+      lang="en"
+      className={`${fredoka.variable} ${jakarta.variable}`}
       suppressHydrationWarning
       data-scroll-behavior="smooth"
     >
       <body className={jakarta.className} suppressHydrationWarning>
+        <Navbar />
         {children}
+        <Footer />
       </body>
     </html>
   )
