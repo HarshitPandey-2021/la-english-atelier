@@ -100,9 +100,9 @@ export default function LoginPage() {
 </div>
         </form>
 
-        <p className="text-center text-sm text-ink-muted mt-6">
+        {/* <p className="text-center text-sm text-ink-muted mt-6">
           Default: admin@littlelearners.com / admin123
-        </p>
+        </p> */}
       </Card>
     </div>
   )

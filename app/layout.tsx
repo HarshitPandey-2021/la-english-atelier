@@ -1,19 +1,21 @@
-import type { Metadata } from 'next'
+'use client'
+
 import { fredoka, jakarta } from '@/lib/fonts'
+import { usePathname } from 'next/navigation'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import './globals.css'
-
-export const metadata: Metadata = {
-  title: 'LittleLearners Academy — Where Curious Minds Begin',
-  description: 'Interactive online learning for kids aged 5-8. Certified teachers, small batches, live classes.',
-}
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const pathname = usePathname()
+
+  // Don't show the public navbar/footer on admin or login pages
+  const hideNavAndFooter = pathname?.startsWith('/admin') || pathname?.startsWith('/login')
+
   return (
     <html
       lang="en"
@@ -21,10 +23,13 @@ export default function RootLayout({
       suppressHydrationWarning
       data-scroll-behavior="smooth"
     >
+       <head>
+        <link rel="icon" href="/logo.png" />
+      </head>
       <body className={jakarta.className} suppressHydrationWarning>
-        <Navbar />
+        {!hideNavAndFooter && <Navbar />}
         {children}
-        <Footer />
+        {!hideNavAndFooter && <Footer />}
       </body>
     </html>
   )

@@ -1,22 +1,36 @@
 'use client'
 
 import { useState } from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
-import { ArrowLeft, CheckCircle, Phone, Mail, MapPin, Users } from 'lucide-react'
+import { ArrowLeft, CheckCircle, Phone, Mail, MapPin, Users, AlertCircle } from 'lucide-react'
 import Link from 'next/link'
+
+const COUNTRY_CODES = [
+  { code: '+91', flag: '🇮🇳' },
+  { code: '+1', flag: '🇺🇸' },
+  { code: '+44', flag: '🇬🇧' },
+  { code: '+971', flag: '🇦🇪' },
+]
+
+const NAME_REGEX = /^[A-Za-z]+(?:[ '-][A-Za-z]+)*$/
+const MOBILE_REGEX = /^\d{10}$/
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export default function EnrollPage() {
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const [touched, setTouched] = useState<Record<string, boolean>>({})
 
   const [formData, setFormData] = useState({
     studentName: '',
     parentName: '',
     childAge: '',
+    countryCode: '+91',
     parentMobile: '',
+    whatsappCountryCode: '+91',
     whatsappNumber: '',
     email: '',
     city: '',
@@ -26,37 +40,109 @@ export default function EnrollPage() {
     agreedToReceiveInfo: false,
   })
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const { name, value, type } = e.target
-    setFormData({
-      ...formData,
-      [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value,
-    })
-    // Clear error when user starts typing
-    if (errors[name]) {
-      setErrors({ ...errors, [name]: '' })
+  const validateField = (name: string, value: string | boolean): string => {
+    switch (name) {
+      case 'studentName':
+        if (!String(value).trim()) return 'Student name is required'
+        if (!NAME_REGEX.test(String(value).trim())) return 'Name can only contain letters'
+        return ''
+      case 'parentName':
+        if (!String(value).trim()) return 'Parent name is required'
+        if (!NAME_REGEX.test(String(value).trim())) return 'Name can only contain letters'
+        return ''
+      case 'childAge':
+        if (!value) return 'Please select child age'
+        return ''
+      case 'parentMobile':
+        if (!String(value).trim()) return 'Mobile number is required'
+        if (!MOBILE_REGEX.test(String(value).trim())) return 'Enter exactly 10 digits'
+        return ''
+      case 'whatsappNumber':
+        if (!String(value).trim()) return 'WhatsApp number is required'
+        if (!MOBILE_REGEX.test(String(value).trim())) return 'Enter exactly 10 digits'
+        return ''
+      case 'email':
+        if (!String(value).trim()) return 'Email is required'
+        if (!EMAIL_REGEX.test(String(value).trim())) return 'Please enter a valid email'
+        return ''
+      case 'city':
+        if (!String(value).trim()) return 'City is required'
+        if (!NAME_REGEX.test(String(value).trim())) return 'City can only contain letters'
+        return ''
+      case 'howDidYouHear':
+        if (!value) return 'Please tell us how you found us'
+        return ''
+      case 'agreedToReceiveInfo':
+        if (!value) return 'Please agree to receive course information'
+        return ''
+      default:
+        return ''
     }
   }
 
-  const validateForm = () => {
-    const newErrors: Record<string, string> = {}
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value, type } = e.target
+    let nextValue: string | boolean =
+      type === 'checkbox' ? (e.target as HTMLInputElement).checked : value
 
-    if (!formData.studentName.trim()) newErrors.studentName = 'Student name is required'
-    if (!formData.parentName.trim()) newErrors.parentName = 'Parent name is required'
-    if (!formData.childAge) newErrors.childAge = 'Please select child age'
-    if (!formData.parentMobile.trim()) newErrors.parentMobile = 'Mobile number is required'
-    if (!formData.whatsappNumber.trim()) newErrors.whatsappNumber = 'WhatsApp number is required'
-    if (!formData.email.trim()) newErrors.email = 'Email is required'
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email'
+    // Letters / spaces / hyphens / apostrophes only
+    if ((name === 'studentName' || name === 'parentName' || name === 'city') && typeof nextValue === 'string') {
+      nextValue = nextValue.replace(/[^A-Za-z '-]/g, '')
     }
-    if (!formData.city.trim()) newErrors.city = 'City is required'
-    if (!formData.howDidYouHear) newErrors.howDidYouHear = 'Please tell us how you found us'
-    if (!formData.agreedToReceiveInfo) {
-      newErrors.agreedToReceiveInfo = 'Please agree to receive course information'
+
+    // Digits only, max 10
+    if ((name === 'parentMobile' || name === 'whatsappNumber') && typeof nextValue === 'string') {
+      nextValue = nextValue.replace(/\D/g, '').slice(0, 10)
     }
+
+    setFormData((prev) => ({ ...prev, [name]: nextValue }))
+
+    // Live validation if the field has already been touched
+    if (touched[name]) {
+      setErrors((prev) => ({ ...prev, [name]: validateField(name, nextValue) }))
+    }
+  }
+
+  const handleBlur = (
+    e: React.FocusEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value, type } = e.target
+    const fieldValue = type === 'checkbox' ? (e.target as HTMLInputElement).checked : value
+    setTouched((prev) => ({ ...prev, [name]: true }))
+    setErrors((prev) => ({ ...prev, [name]: validateField(name, fieldValue) }))
+  }
+
+  const handleAgeSelect = (age: number) => {
+    setFormData((prev) => ({ ...prev, childAge: age.toString() }))
+    setTouched((prev) => ({ ...prev, childAge: true }))
+    setErrors((prev) => ({ ...prev, childAge: '' }))
+  }
+
+  const validateForm = () => {
+    const fields = [
+      'studentName',
+      'parentName',
+      'childAge',
+      'parentMobile',
+      'whatsappNumber',
+      'email',
+      'city',
+      'howDidYouHear',
+      'agreedToReceiveInfo',
+    ] as const
+
+    const newErrors: Record<string, string> = {}
+    fields.forEach((field) => {
+      const err = validateField(field, formData[field] as string | boolean)
+      if (err) newErrors[field] = err
+    })
 
     setErrors(newErrors)
+    setTouched(
+      fields.reduce((acc, field) => ({ ...acc, [field]: true }), {} as Record<string, boolean>)
+    )
     return Object.keys(newErrors).length === 0
   }
 
@@ -64,7 +150,6 @@ export default function EnrollPage() {
     e.preventDefault()
 
     if (!validateForm()) {
-      // Scroll to first error
       const firstError = document.querySelector('.error-message')
       firstError?.scrollIntoView({ behavior: 'smooth', block: 'center' })
       return
@@ -80,6 +165,12 @@ export default function EnrollPage() {
         },
         body: JSON.stringify({
           ...formData,
+          studentName: formData.studentName.trim(),
+          parentName: formData.parentName.trim(),
+          city: formData.city.trim(),
+          email: formData.email.trim(),
+          parentMobile: `${formData.countryCode}${formData.parentMobile}`,
+          whatsappNumber: `${formData.whatsappCountryCode}${formData.whatsappNumber}`,
           childAge: parseInt(formData.childAge),
         }),
       })
@@ -98,6 +189,23 @@ export default function EnrollPage() {
       setLoading(false)
     }
   }
+
+  const FieldError = ({ message }: { message?: string }) => (
+    <AnimatePresence>
+      {message && (
+        <motion.p
+          initial={{ opacity: 0, y: -4, height: 0 }}
+          animate={{ opacity: 1, y: 0, height: 'auto' }}
+          exit={{ opacity: 0, y: -4, height: 0 }}
+          transition={{ duration: 0.15 }}
+          className="error-message mt-1.5 text-sm text-error flex items-center gap-1.5"
+        >
+          <AlertCircle className="w-3.5 h-3.5 flex-shrink-0" />
+          {message}
+        </motion.p>
+      )}
+    </AnimatePresence>
+  )
 
   if (submitted) {
     return (
@@ -122,7 +230,7 @@ export default function EnrollPage() {
             </h1>
 
             <p className="text-lg text-ink-muted mb-8 leading-relaxed">
-              Thank you for enrolling <span className="font-semibold text-primary">{formData.studentName}</span>! 
+              Thank you for enrolling <span className="font-semibold text-primary">{formData.studentName}</span>!
               <br />
               Our team will contact you within <span className="font-semibold text-ink">24 hours</span>.
             </p>
@@ -137,24 +245,26 @@ export default function EnrollPage() {
                 <div className="flex items-center gap-3">
                   <Phone className="w-5 h-5 text-primary flex-shrink-0" />
                   <span className="text-ink-muted">We'll call/WhatsApp:</span>
-                  <span className="font-semibold text-ink ml-auto">{formData.whatsappNumber}</span>
+                  <span className="font-semibold text-ink ml-auto">
+                    {formData.whatsappCountryCode} {formData.whatsappNumber}
+                  </span>
                 </div>
               </div>
             </div>
 
             <div className="space-y-3">
-             <Button
-  className="w-full"
-  onClick={() => window.location.href = 'https://wa.me/1234567890'}
->
-  💬 Chat on WhatsApp
-</Button>
+              <Button
+                className="w-full"
+                onClick={() => (window.location.href = 'https://wa.me/1234567890')}
+              >
+                💬 Chat on WhatsApp
+              </Button>
 
-<Link href="/" className="block mt-4">
-  <Button variant="secondary" className="w-full">
-    ← Back to Home
-  </Button>
-</Link>
+              <Link href="/" className="block mt-4">
+                <Button variant="secondary" className="w-full">
+                  ← Back to Home
+                </Button>
+              </Link>
             </div>
           </Card>
         </motion.div>
@@ -163,7 +273,7 @@ export default function EnrollPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background-cream via-background-lavender to-background-peach py-8 sm:py-16 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-background-cream via-background-lavender to-background-peach pt-24 sm:pt-32 pb-8 sm:pb-16 px-4">
       <div className="max-w-3xl mx-auto">
         {/* Header */}
         <div className="mb-8">
@@ -192,7 +302,7 @@ export default function EnrollPage() {
           transition={{ delay: 0.1 }}
         >
           <Card className="p-6 sm:p-8 lg:p-10">
-            <form onSubmit={handleSubmit} className="space-y-8">
+            <form onSubmit={handleSubmit} className="space-y-8" noValidate>
               {/* Student Information Section */}
               <div>
                 <div className="flex items-center gap-3 mb-6">
@@ -214,14 +324,13 @@ export default function EnrollPage() {
                       name="studentName"
                       value={formData.studentName}
                       onChange={handleChange}
+                      onBlur={handleBlur}
                       className={`w-full px-4 py-3 rounded-xl border-2 ${
                         errors.studentName ? 'border-error' : 'border-border'
                       } focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all`}
                       placeholder="Emma Watson"
                     />
-                    {errors.studentName && (
-                      <p className="error-message mt-1 text-sm text-error">{errors.studentName}</p>
-                    )}
+                    <FieldError message={errors.studentName} />
                   </div>
 
                   <div>
@@ -233,10 +342,7 @@ export default function EnrollPage() {
                         <button
                           key={age}
                           type="button"
-                          onClick={() => {
-                            setFormData({ ...formData, childAge: age.toString() })
-                            setErrors({ ...errors, childAge: '' })
-                          }}
+                          onClick={() => handleAgeSelect(age)}
                           className={`py-3 rounded-xl border-2 font-semibold transition-all ${
                             formData.childAge === age.toString()
                               ? 'border-primary bg-primary text-white shadow-lg scale-105'
@@ -249,9 +355,7 @@ export default function EnrollPage() {
                         </button>
                       ))}
                     </div>
-                    {errors.childAge && (
-                      <p className="error-message mt-1 text-sm text-error">{errors.childAge}</p>
-                    )}
+                    <FieldError message={errors.childAge} />
                   </div>
                 </div>
               </div>
@@ -277,52 +381,81 @@ export default function EnrollPage() {
                       name="parentName"
                       value={formData.parentName}
                       onChange={handleChange}
+                      onBlur={handleBlur}
                       className={`w-full px-4 py-3 rounded-xl border-2 ${
                         errors.parentName ? 'border-error' : 'border-border'
                       } focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all`}
                       placeholder="John Watson"
                     />
-                    {errors.parentName && (
-                      <p className="error-message mt-1 text-sm text-error">{errors.parentName}</p>
-                    )}
+                    <FieldError message={errors.parentName} />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-ink mb-2">
                       Parent Mobile Number <span className="text-error">*</span>
                     </label>
-                    <input
-                      type="tel"
-                      name="parentMobile"
-                      value={formData.parentMobile}
-                      onChange={handleChange}
-                      className={`w-full px-4 py-3 rounded-xl border-2 ${
-                        errors.parentMobile ? 'border-error' : 'border-border'
-                      } focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all`}
-                      placeholder="+91 98765 43210"
-                    />
-                    {errors.parentMobile && (
-                      <p className="error-message mt-1 text-sm text-error">{errors.parentMobile}</p>
-                    )}
+                    <div className="flex gap-2">
+                      <select
+                        name="countryCode"
+                        value={formData.countryCode}
+                        onChange={handleChange}
+                        className="px-2 py-3 rounded-xl border-2 border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all bg-white"
+                      >
+                        {COUNTRY_CODES.map((c) => (
+                          <option key={c.code} value={c.code}>
+                            {c.flag} {c.code}
+                          </option>
+                        ))}
+                      </select>
+                      <input
+                        type="tel"
+                        name="parentMobile"
+                        value={formData.parentMobile}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        maxLength={10}
+                        inputMode="numeric"
+                        className={`flex-1 w-full px-4 py-3 rounded-xl border-2 ${
+                          errors.parentMobile ? 'border-error' : 'border-border'
+                        } focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all`}
+                        placeholder="98765 43210"
+                      />
+                    </div>
+                    <FieldError message={errors.parentMobile} />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-ink mb-2">
                       WhatsApp Number <span className="text-error">*</span>
                     </label>
-                    <input
-                      type="tel"
-                      name="whatsappNumber"
-                      value={formData.whatsappNumber}
-                      onChange={handleChange}
-                      className={`w-full px-4 py-3 rounded-xl border-2 ${
-                        errors.whatsappNumber ? 'border-error' : 'border-border'
-                      } focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all`}
-                      placeholder="+91 98765 43210"
-                    />
-                    {errors.whatsappNumber && (
-                      <p className="error-message mt-1 text-sm text-error">{errors.whatsappNumber}</p>
-                    )}
+                    <div className="flex gap-2">
+                      <select
+                        name="whatsappCountryCode"
+                        value={formData.whatsappCountryCode}
+                        onChange={handleChange}
+                        className="px-2 py-3 rounded-xl border-2 border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all bg-white"
+                      >
+                        {COUNTRY_CODES.map((c) => (
+                          <option key={c.code} value={c.code}>
+                            {c.flag} {c.code}
+                          </option>
+                        ))}
+                      </select>
+                      <input
+                        type="tel"
+                        name="whatsappNumber"
+                        value={formData.whatsappNumber}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        maxLength={10}
+                        inputMode="numeric"
+                        className={`flex-1 w-full px-4 py-3 rounded-xl border-2 ${
+                          errors.whatsappNumber ? 'border-error' : 'border-border'
+                        } focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all`}
+                        placeholder="98765 43210"
+                      />
+                    </div>
+                    <FieldError message={errors.whatsappNumber} />
                     <p className="mt-1 text-xs text-ink-muted">We'll send updates via WhatsApp</p>
                   </div>
 
@@ -335,14 +468,13 @@ export default function EnrollPage() {
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
+                      onBlur={handleBlur}
                       className={`w-full px-4 py-3 rounded-xl border-2 ${
                         errors.email ? 'border-error' : 'border-border'
                       } focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all`}
                       placeholder="john@example.com"
                     />
-                    {errors.email && (
-                      <p className="error-message mt-1 text-sm text-error">{errors.email}</p>
-                    )}
+                    <FieldError message={errors.email} />
                   </div>
 
                   <div>
@@ -354,14 +486,13 @@ export default function EnrollPage() {
                       name="city"
                       value={formData.city}
                       onChange={handleChange}
+                      onBlur={handleBlur}
                       className={`w-full px-4 py-3 rounded-xl border-2 ${
                         errors.city ? 'border-error' : 'border-border'
                       } focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all`}
                       placeholder="Mumbai"
                     />
-                    {errors.city && (
-                      <p className="error-message mt-1 text-sm text-error">{errors.city}</p>
-                    )}
+                    <FieldError message={errors.city} />
                   </div>
                 </div>
               </div>
@@ -386,6 +517,7 @@ export default function EnrollPage() {
                       name="howDidYouHear"
                       value={formData.howDidYouHear}
                       onChange={handleChange}
+                      onBlur={handleBlur}
                       className={`w-full px-4 py-3 rounded-xl border-2 ${
                         errors.howDidYouHear ? 'border-error' : 'border-border'
                       } focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all bg-white`}
@@ -399,24 +531,8 @@ export default function EnrollPage() {
                       <option value="advertisement">Advertisement</option>
                       <option value="other">Other</option>
                     </select>
-                    {errors.howDidYouHear && (
-                      <p className="error-message mt-1 text-sm text-error">{errors.howDidYouHear}</p>
-                    )}
+                    <FieldError message={errors.howDidYouHear} />
                   </div>
-
-                  {/* <div>
-                    <label className="block text-sm font-medium text-ink mb-2">
-                      Preferred Batch <span className="text-ink-muted text-xs">(Optional)</span>
-                    </label>
-                    <input
-                      type="text"
-                      name="preferredBatch"
-                      value={formData.preferredBatch}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 rounded-xl border-2 border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                      placeholder="e.g., Weekday Mornings, Weekend Evenings"
-                    />
-                  </div> */}
 
                   <div>
                     <label className="block text-sm font-medium text-ink mb-2">
@@ -442,6 +558,7 @@ export default function EnrollPage() {
                     name="agreedToReceiveInfo"
                     checked={formData.agreedToReceiveInfo}
                     onChange={handleChange}
+                    onBlur={handleBlur}
                     className={`mt-1 w-5 h-5 rounded border-2 ${
                       errors.agreedToReceiveInfo ? 'border-error' : 'border-primary'
                     } text-primary focus:ring-2 focus:ring-primary/20 cursor-pointer`}
@@ -450,15 +567,13 @@ export default function EnrollPage() {
                     I agree to receive course information, updates, and promotional content via email, WhatsApp, and SMS.
                   </span>
                 </label>
-                {errors.agreedToReceiveInfo && (
-                  <p className="error-message mt-2 text-sm text-error ml-8">{errors.agreedToReceiveInfo}</p>
-                )}
+                <FieldError message={errors.agreedToReceiveInfo} />
               </div>
 
               {/* Submit Button */}
               <Button
                 type="submit"
-                className="w-full text-lg py-4"
+                className={`w-full text-lg py-4 ${loading ? 'opacity-60 cursor-not-allowed' : ''}`}
                 disabled={loading}
               >
                 {loading ? (
@@ -483,4 +598,4 @@ export default function EnrollPage() {
       </div>
     </div>
   )
-}
+} 
