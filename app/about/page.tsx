@@ -21,15 +21,15 @@ export default function AboutUs() {
             <div className="relative w-full aspect-square max-w-md mx-auto rounded-3xl overflow-hidden shadow-card-hover border-4 border-primary/10">
               {/* Placeholder image — swap src with the founder/teacher photo */}
               <Image
-                src="/logo.png"
+                src="/About.png"
                 alt="Founder of La English Atelier"
                 fill
                 className="object-cover"
               />
             </div>
             <div className="absolute -bottom-4 -right-4 sm:-bottom-6 sm:-right-6 bg-white rounded-2xl shadow-card px-5 py-4 border-2 border-primary/10">
-              <div className="text-2xl font-display font-bold text-primary">5+</div>
-              <div className="text-sm text-ink-muted">Years Teaching</div>
+              <div className="text-2xl font-display font-bold text-primary">18+</div>
+              <div className="text-sm text-ink-muted">Years in Education</div>
             </div>
           </motion.div>
 
@@ -42,22 +42,31 @@ export default function AboutUs() {
           >
             <Badge variant="primary" className="mb-4">About Us</Badge>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold text-ink mb-6 leading-tight">
-              Meet the Heart Behind La English Atelier
+              Meet the Soul Behind La English Atelier
             </h2>
+            <h3>Ms. Rashida Zaidi</h3> 
+              <p>Founder and Academic Director, La English Atelier</p>
+              <p></p>
+              <h4>M.A(English Literature), M.Ed.,B.Ed.</h4>
+
+              <p>   </p>
+
+
             <p className="text-base sm:text-lg text-ink-muted mb-6 leading-relaxed">
-              La English Atelier was founded with one simple belief: every
-              child deserves a warm, encouraging space to find their voice.
-              What started as a handful of weekend lessons has grown into a
-              community of curious young learners building real confidence
-              in English, one small step at a time.
+               
+              
+              Ms. Rashida Zaidi is a distinguished educator, language mentor,
+              and academic leader with 18+ years of experience in education,
+              renowned for her passion for language learning and academic excellence.
+
             </p>
             <p className="text-base sm:text-lg text-ink-muted mb-8 leading-relaxed">
-              With years of hands-on classroom experience, our founder
-              designed every lesson to feel less like a class and more like
-              an adventure — blending phonics, storytelling, and creative
-              expression so children don't just learn English, they fall in
-              love with it.
+              As the Founder and Academic Director of La English Atelier, she has envisioned and established
+              a unique learning environment where English is not simply taught but lived and experienced through
+              meaningful conversations, storytelling, Grammar, critical thinking, creativity and self-expression.
             </p>
+            
+            <p></p>
 
             <div className="grid sm:grid-cols-3 gap-4">
               <div className="flex flex-col items-center text-center p-4 rounded-xl bg-primary/5 border border-primary/10">
@@ -70,7 +79,7 @@ export default function AboutUs() {
               </div>
               <div className="flex flex-col items-center text-center p-4 rounded-xl bg-success/5 border border-success/10">
                 <Users className="w-6 h-6 text-success mb-2" />
-                <span className="text-sm font-semibold text-ink">2,000+ Families</span>
+                <span className="text-sm font-semibold text-ink">1,016+ Families</span>
               </div>
             </div>
           </motion.div>
