@@ -338,8 +338,8 @@ const response = await fetch('/api/v1/enrollments', {
                     <label className="block text-sm font-medium text-ink mb-2">
                       Child Age <span className="text-error">*</span>
                     </label>
-                    <div className="grid grid-cols-4 gap-3">
-                      {[5, 6, 7, 8].map((age) => (
+                    <div className="grid grid-cols-6 gap-3">
+                      {[5, 6, 7, 8, 9, 10].map((age) => (
                         <button
                           key={age}
                           type="button"
